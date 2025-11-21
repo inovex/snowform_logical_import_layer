@@ -1,0 +1,87 @@
+name: SnowForm Workflow
+run-name: ${{ github.actor }} is testing updates for a SnowForm Terraform Module 🚀
+on: [push]
+
+jobs:
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache TFLint plugin dir
+        uses: actions/cache@v3
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint --recursive
+
+  terraform-fmt:
+    name: Terraform Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.9.0
+
+      - name: Terraform Format Check
+        run: tofu fmt -check -recursive
+
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.9.0
+
+      - name: OpenTofu init
+        run: tofu init
+
+      - name: Run OpenTofu Tests
+        run: tofu test
+
+  kics-scan:
+    name: KICS Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run KICS Scan
+        uses: checkmarx/kics-github-action@v2.1.14
+        with:
+          path: '.'
+          fail_on: high,critical
+          output_formats: 'json'
+          output_path: 'kics-results.json'
+          disable_progress_bar: true
+
+      - name: Upload KICS results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kics-results.json
+          path: kics-results.json
