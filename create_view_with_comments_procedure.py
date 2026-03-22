@@ -70,7 +70,7 @@ def CREATE_VIEW_WITH_COLUMN_COMMENTS(
             columns.append(f"{col_name}")
 
             # Escape single quotes in the comment string to make it a valid SQL literal
-            escaped_comment = col_comment.replace("'", "''")
+            escaped_comment = col_comment.replace("'", "''") if col_comment else ""
             column_row = f"  {col_name} COMMENT '{escaped_comment}'"
             columns_with_comments.append(column_row)
 
