@@ -6,7 +6,7 @@ from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 from snowflake.snowpark.exceptions import SnowparkSQLException
 
-def create_view_with_column_comments(
+def CREATE_VIEW_WITH_COLUMN_COMMENTS(
     session: Session,
     SOURCE_NAME: str,
     TARGET_DB_NAME: str,
