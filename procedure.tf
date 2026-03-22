@@ -1,7 +1,7 @@
 resource "snowflake_procedure_python" "view_with_comments_creator" {
   provider = snowflake.sysadmin
 
-  name     = "create_view_with_column_comments"
+  name     = "CREATE_VIEW_WITH_COLUMN_COMMENTS"
   database = var.procedure_database
   schema   = var.procedure_schema
 
@@ -34,7 +34,7 @@ resource "snowflake_procedure_python" "view_with_comments_creator" {
   }
 
   return_type = "VARCHAR(1000)"
-  handler     = "create_view_with_column_comments"
+  handler     = "CREATE_VIEW_WITH_COLUMN_COMMENTS"
 
   # Python code implementing the view creation logic
   procedure_definition = file("${path.module}/create_view_with_comments_procedure.py")
