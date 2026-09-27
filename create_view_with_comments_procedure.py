@@ -6,6 +6,10 @@ from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 from snowflake.snowpark.exceptions import SnowparkSQLException
 
+def escape_sql_literal(value: str) -> str:
+    """Escape single quotes so the value can be used inside a SQL string literal."""
+    return value.replace("'", "''")
+
 def CREATE_VIEW_WITH_COLUMN_COMMENTS(
     session: Session,
     SOURCE_NAME: str,
@@ -69,20 +73,27 @@ def CREATE_VIEW_WITH_COLUMN_COMMENTS(
             col_comment = row["COMMENT"]
             columns.append(f"{col_name}")
 
-            # Escape single quotes in the comment string to make it a valid SQL literal
-            escaped_comment = col_comment.replace("'", "''") if col_comment else ""
-            column_row = f"  {col_name} COMMENT '{escaped_comment}'"
+            # Only add a COMMENT clause if the source column has a comment
+            if col_comment:
+                column_row = f"  {col_name} COMMENT '{escape_sql_literal(col_comment)}'"
+            else:
+                column_row = f"  {col_name}"
             columns_with_comments.append(column_row)
 
         columns_for_select = ", ".join(columns)
-        create_view_statement = "\n".join((
+        statement_parts = [
             f"CREATE OR REPLACE VIEW {TARGET_DB_NAME}.{TARGET_SCHEMA}.{TARGET_VIEW} (",
             ", ".join(columns_with_comments),
             ")",
-            f"COMMENT = '{table_comment_to_apply}'",
+        ]
+        # Only add a COMMENT clause if the source table has a comment
+        if table_comment_to_apply:
+            statement_parts.append(f"COMMENT = '{escape_sql_literal(table_comment_to_apply)}'")
+        statement_parts += [
             "AS",
             f"SELECT {columns_for_select} FROM {SOURCE_NAME}"
-        ))
+        ]
+        create_view_statement = "\n".join(statement_parts)
         logger.info(create_view_statement)
         
         # Execute the DDL statement
