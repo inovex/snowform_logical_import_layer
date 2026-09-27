@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-09-27
+
 ### Fixed
 
 - Views of source tables without a comment no longer get the literal comment `'None'`. Columns without a comment no longer get an empty `COMMENT ''`.
