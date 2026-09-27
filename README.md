@@ -37,8 +37,7 @@ This module helps you organize imported databases from different shares into you
 
 ```hcl
 module "logical_import_layer" {
-  source  = "gitlab.dm-drogeriemarkt.com/?"
-  version = "1.0.0"
+  source = "github.com/inovex/snowform_logical_import_layer.git?ref=0.0.4"
 
   # Location for the stored procedure
   procedure_database = "SHARED_UTILITIES"
@@ -83,8 +82,7 @@ module "logical_import_layer" {
 
 ```hcl
 module "logical_import_layer_dynamic" {
-  source  = "gitlab.dm-drogeriemarkt.com/?"
-  version = "1.0.0"
+  source = "github.com/inovex/snowform_logical_import_layer.git?ref=0.0.4"
 
   procedure_database = "SHARED_UTILITIES"
   procedure_schema   = "PROCEDURES"
