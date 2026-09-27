@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Views of source tables without a comment no longer get the literal comment `'None'`. Columns without a comment no longer get an empty `COMMENT ''`.
+- Single quotes in table comments are now escaped.
+
 ### Changed
 
 - README usage examples now reference the GitHub module source.
