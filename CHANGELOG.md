@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### TODO
+### Changed
+
+- README usage examples now reference the GitHub module source.
+
+## [0.0.4] - 2026-03-22
+
+### Fixed
+
+- Creating views from imported tables whose columns have no comments no longer fails (#3).
+
+## [0.0.3] - 2026-03-22
+
+Same commit as 0.0.2.
+
+## [0.0.2] - 2026-03-22
+
+### Changed
+
+- The stored procedure is named `CREATE_VIEW_WITH_COLUMN_COMMENTS` (capitalized) for easier usage (#2).
 
 ## [0.0.1] - 2025-11-21
 
